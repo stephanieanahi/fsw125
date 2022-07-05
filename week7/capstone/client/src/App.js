@@ -4,6 +4,7 @@ import axios from 'axios';
 import {useState, useEffect} from "react";
 import Item from './components/Item';
 import ItemFormHandler from './components/ItemFormHandler';
+import ItemSearch from './components/ItemSearch';
 
 function App() {
    const [items, setItems] = useState([]);
@@ -13,7 +14,15 @@ function App() {
       .then(res => setItems(res.data))
       .catch(err => console.log(err))
    }
+   const searchItems = (query) => {
+    axios.get(`/items/search/material?material=${query}`)
+      .then(res => setItems(res.data))
+      .catch(err => console.log(err))
+   }
 
+   function clearSearch(){
+    getItems()
+   }
    const addItem = (newItem) => {
     axios.post('/items', newItem)
     .then(res => {
@@ -49,6 +58,9 @@ function App() {
       <ItemFormHandler 
       btnText='Add Item'
       submit={addItem}/>
+      <ItemSearch
+      clearSearch= {clearSearch}
+      searchItems= {searchItems}/>
       {itemsList}
     </div>
    );
